@@ -1,0 +1,98 @@
+<?php
+$epic = $_GET['epic'];
+define("HostName","localhost");
+define("UserName","root");
+define("Password","");
+define("DbName","userdb");
+$con=mysqli_connect(HostName,UserName,Password) or die("Failed to connect to MySQL: "); 
+mysqli_select_db($con,DbName) or die("Failed to connect to database: ");
+$sql="SELECT epicno,acno,partno,slno,first_nm,last_nm,first_rl,last_rl,type_rl,age,gender,address,photo FROM verify WHERE  epicno='$epic'";
+$result=mysqli_query($con,$sql);
+if(mysqli_num_rows($result)>=1)
+{
+  if($row=mysqli_fetch_array($result))
+  {
+  $epicno=$row["epicno"];
+  $acno=$row["acno"];
+  $partno=$row["partno"];
+  $slno=$row["slno"];
+  $firstnm=$row["first_nm"];
+  $lastnm=$row["last_nm"];
+  $firstrl=$row["first_rl"];
+  $lastrl=$row["last_rl"];
+  $typerl=$row["type_rl"];
+  $age=$row["age"];
+  $gender=$row["gender"];
+  $address=$row["address"];
+  $photo=base64_encode($row["photo"]);
+             echo "<form>";
+                echo "<table class='table table-bordered table-hover table-striped table-th-center'>";
+                  echo "<tr>";
+                     echo "<td>Epic No :</td>";
+                     echo "<td>".$epicno."</td>";
+                  echo "</tr>";
+                   echo "<tr>";
+                     echo "<td>Assembly No :</td>";
+                     echo "<td>".$acno."</td>";
+                  echo "</tr>";
+                   echo "<tr>";
+                     echo "<td>Part No :</td>";
+                     echo "<td>".$partno."</td>";
+                  echo "</tr>";
+                   echo "<tr>";
+                     echo "<td>SL No :</td>";
+                     echo "<td>".$slno."</td>";
+                  echo "</tr>";
+                  echo "<tr>";
+                     echo "<td>Name :</td>";
+                     echo "<td>".$firstnm." ".$lastnm."</td>";
+                   echo "</tr>";
+                   echo "<tr>";
+                     echo "<td>Relative Name :</td>";
+                     echo "<td>".$firstrl." ".$lastrl."</td>";
+                   echo " </tr>";
+                     echo "<tr>";
+                         echo "<td>Relation Type :</td>";
+                         echo "<td>".$typerl."</td>";
+                     echo "</tr>";
+                     echo "<tr>";
+                         echo "<td>Age :</td>";
+                         echo "<td>".$age."</td>";
+                     echo "</tr>";
+                     echo "<tr>";
+                         echo "<td>Gender :</td>";
+                         echo "<td>".$gender."</td>";
+                     echo "</tr>";
+                     echo "<tr>";
+                         echo "<td>Address :</td>";
+                         echo "<td>".$address."</td>";
+                     echo "</tr>";
+                     echo "<tr>";
+                         echo "<td></td>";
+                         echo "<td>".'<img src="data:image/jpeg;base64,'.$photo.'" style="height:200px; width:200px;"/>'."</td>";
+                     echo "</tr>";
+                     echo "<tr>";
+                        echo "<td colspan='2'>";
+                                  echo "<div class='col-md-4'>";
+                                     echo "<input id='correct' name='correctIncorrect' type='radio' value='SUBMITTED' />";
+                                     echo "<label>Information displayed above is correct</label>";           
+                                  echo "</div>";
+                                  echo "<div class='col-md-4'>";                                
+                                     echo "<input id='incorrect' name='correctIncorrect' type='radio' value='CORRECTION_NEEDED' />";
+                                     echo "<label>Information displayed above needs correction</label>";
+                                echo "</div>";
+                                echo "<div class='col-md-4'>";                                
+                                    echo "<input type='button' name='voterSubmit' id='voterSubmit' value='SUBMIT' onclick='familyStatus();' />";
+                                echo "</div>";
+                                 echo "<div class='col-md-4'>";                                
+                                    echo "<button type='button' name='pdfButton' id='pdfButton'><a href='getfamily_pdf.php?id=".$epicno."' target='_BLANK'>PRINT</a></button>";
+                                echo "</div>";
+                          echo "</td>";
+                     echo "</tr>";
+                 echo "</table>";     
+             echo "</form>";             
+ }
+}
+else echo "<h4 style='color:red;text-align:center;'>No record found</h4>";
+mysqli_close($con);
+?>
